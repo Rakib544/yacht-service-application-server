@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId; 
 require('dotenv').config();
 
 app.use(cors());
@@ -35,6 +36,14 @@ client.connect(err => {
         serviceCollection.find({})
         .toArray((err, services) => {
             res.send(services)
+        })
+    })
+
+    app.get('/findSingleService/:id', (req, res) => {
+        const id=req.params.id;
+        serviceCollection.findOne({_id: ObjectId(`${id}`)})
+        .then(result => {
+            res.send(result)
         })
     })
 
@@ -86,9 +95,9 @@ client.connect(err => {
         })
     })
 
-    app.get('/usersOrders', (req, res) => {
-        const email = req.body.email;
-        orderCollection.find({email: email})
+    app.get('/usersOrders/:email', (req, res) => {
+        const email = req.params.email;
+        orderCollection.find({userEmail: `${email}`})
         .toArray((err, orders) => {
             res.send(orders)
         })
@@ -97,4 +106,4 @@ client.connect(err => {
 });
 
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 8081);
