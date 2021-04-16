@@ -31,6 +31,13 @@ client.connect(err => {
             })
     })
 
+    app.get('/allServices', (req, res) => {
+        serviceCollection.find({})
+        .toArray((err, services) => {
+            res.send(services)
+        })
+    })
+
     app.post('/addReview', (req, res) => {
         const review = req.body;
         reviewCollection.insertOne(review)
@@ -40,12 +47,26 @@ client.connect(err => {
         })
     })
 
+    app.get('/allReviews', (req, res) => {
+        reviewCollection.find({})
+        .toArray((err, reviews) => {
+            res.send(reviews)
+        })
+    })
+
     app.post('/addAdmin', (req, res) => {
         const newAdmin = req.body;
         adminCollection.insertOne(newAdmin)
         .then(result => {
             console.log(result.insertedCount)
             res.send(result.insertedCount > 0)
+        })
+    })
+
+    app.get('/allAdmins', (req, res) => {
+        adminCollection.find({})
+        .toArray((err, admins) => {
+            res.send(admins)
         })
     })
 
