@@ -103,6 +103,23 @@ client.connect(err => {
         })
     })
 
+    app.patch('/update', (req, res) => {
+        orderCollection.updateOne({_id: ObjectId(`${req.body.id}`)}, {
+            $set: {orderStatus: req.body.statusValue}
+        })
+        .then(result => {
+            res.send(result)
+        })
+    })
+
+    app.delete('/delete', (req, res) => {
+        serviceCollection.deleteOne({_id: ObjectId(`${req.body.id}`)})
+        .then(result => {
+            res.send(result.deletedCount > 0)
+            console.log(result.deletedCount)
+        })
+    })
+   
 });
 
 
